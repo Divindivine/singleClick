@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Single Click Keyboard</title>
+</head>
+<body>
+    <div class="whole">
+        <div class="screen">
+            <div class="screen_inner">
+                <textarea name="" id="text_area" placeholder="Hai there..." readonly></textarea>
+                <div class="sentField">
+                    <div id="sendAddress">
+                        <label for="email" id="sendto">to:</label>
+                        <input type="email" id="email" autocomplete="email" disabled>
+                    </div>
+                    <div id="send_button_div">
+                        <img src="img/sendbutton.png" alt="" id="send_button">
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div id="keyboard">
+            <div class="keyboard_inner">
+                <div class="keys firstrow"></div>
+                <div class="keys secondrow"></div>
+                <div class="keys thirdrow"></div>
+                <div class="keys fourthrow"></div>
+                <div class="keys fifthrow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

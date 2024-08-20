@@ -1,0 +1,129 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background: linear-gradient(135deg, black, rgb(100, 85, 58));
+    height: 150vh;
+      
+}
+
+.whole{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.screen{
+    width: 100%;
+    background: aliceblue;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 984px;
+    margin: 0 auto;
+}
+
+.screen_inner{
+    width: 100%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    gap: 10px;
+}
+
+#text_area{
+    border: solid black;
+    border-width: 1px;
+    border-radius: 15px;
+    height: 70vh;
+    padding: 5px;
+    outline: none;
+    font-size: 20px;
+}
+
+.sentField{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#sendAddress{
+    display: flex;
+    width: 90%;
+    border: solid black;
+    border-radius: 10px;
+    padding-left: 5px;
+    border-width: 1px;
+}
+
+#sendto{
+    font-size: 20px;
+}
+
+#email{
+    font-size: 20px;
+    outline: none;
+    width: 90%;
+    border-radius: 10px;
+    
+}
+
+#send_button_div{
+    border: solid black;
+    height: 35px;
+    width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border-width: 1px;
+}   
+
+#send_button{
+    height: 25px;
+}
+
+#keyboard{
+    width: 100%;
+    border-radius: 15px;
+    background: gray;
+    padding: 10px;
+    min-width: 406px;
+    max-width: 448px;
+    margin: 0 auto;
+    display: none;
+}
+
+.keyboard_inner{
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+}
+
+.keys{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.char{
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: solid black;
+    border-width: 0px;
+}

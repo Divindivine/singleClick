@@ -9,8 +9,10 @@ let keyboardRun = false;
 let totalKeys = [];
 let keyPosition = 0;
 let displayArr = [];
-
-
+let textKeyboard;
+let sendKeyboard;
+let a;
+let b;
 
 
 function fetchdata(){
@@ -113,9 +115,12 @@ var clickTImer = null;
 
 
 
-
+document.querySelector('body').removeEventListener('click',clickFunction);
 document.querySelector('body').addEventListener('click',clickFunction);
  function clickFunction(){
+
+    textKeyboard = true;
+    sendKeyboard = true;
     if(mainClickRun){
         keyboardRun = false;
         clickCounter++;
@@ -138,13 +143,14 @@ document.querySelector('body').addEventListener('click',clickFunction);
 }
 
 
+
 let textArea = document.getElementById('text_area');
 let textAreaWidth = window.getComputedStyle(textArea).borderWidth;
 let sendArea = document.getElementById('sendAddress');
 let sendAreaWidth = window.getComputedStyle(sendArea).borderWidth;
 let sendButton = document.getElementById('send_button_div');
 let sendButtonWidth = window.getComputedStyle(sendButton).borderWidth;
-
+let sendArea1 = document.getElementById('email');
 
 function movingMain(){
     mainIncr++;
@@ -171,26 +177,23 @@ function movingMain(){
 
 function selectingElement(){
     if(textArea.style.borderWidth === "3px"){
-
         textArea.readOnly = false;
         textArea.focus();
         textArea.style.height = "45vh";
         let keyboard = document.getElementById('keyboard');
         keyboard.style.display = "block";
+        b = 0;
         keyboardRunner(textArea);
-        displayArr.forEach(element => {
-            textArea.innerHTML += element;
-        })
     }
 
     else if(sendArea.style.borderWidth ==="3px"){
-
-        sendArea.disabled = false;
-        sendArea.focus();
-        textArea.style.height = "70vh";
+        sendArea1.disabled = false;
+        sendArea1.focus();
+        textArea.style.height = "45vh";
         let keyboard = document.getElementById('keyboard');
         keyboard.style.display = "block";
-        keyboardRunner(sendArea);
+        a = 0;
+        keyboardRunner2(sendArea1);
     }
     
     else if(sendButton.style.borderWidth ==="3px"){
@@ -200,17 +203,15 @@ function selectingElement(){
 
 
 function triple(){
-    if(textArea.style.borderWidth ==="3px"){
-        mainClickRun = true;
-        keyboardRun = false;
-    }
+    console.log("multiplce click detected");
 }
 
-con
-
-
-function keyboardRunner(){
-
+function keyboardRunner(area){
+    if(a === 0){
+        return;
+    }
+    totalKeys = [];
+    keyPosition = 0;
     mainClickRun = false;
     keyboardRun = true;
 
@@ -236,7 +237,6 @@ function keyboardRunner(){
     document.querySelector('body').addEventListener('click',keyboardClicker);
     
     function keyboardClicker(){
-        
         if(keyboardRun){
             clickCounterKeyboard++;
             if(clickTImerKeyboard){
@@ -247,7 +247,59 @@ function keyboardRunner(){
                     movingKeys();
                 }
                 else if(clickCounterKeyboard === 2){
-                    selectingKey();
+                    selectingKey(area);
+                }
+                else if(clickCounterKeyboard >= 3){
+                    rowDown();
+                }
+                clickCounterKeyboard = 0;
+            }, 400);
+        }
+    }
+}
+
+function keyboardRunner2(area){
+    if(b === 0){
+        return;
+    }
+    totalKeys = [];
+    keyPosition = 0;
+    mainClickRun = false;
+    keyboardRun = true;
+
+    firstRow.forEach(element => {
+        totalKeys.push(element);
+    });
+    secondRow.forEach(element => {
+        totalKeys.push(element);
+    });
+    thirdRow.forEach(element => {
+        totalKeys.push(element);
+    });
+    fourthRow.forEach(element => {
+        totalKeys.push(element);
+    });
+    fifthRow.forEach(element => {
+        totalKeys.push(element);
+    });
+
+
+    let clickCounterKeyboard = 0;
+    let clickTImerKeyboard = null; 
+    document.querySelector('body').addEventListener('click',keyboardClicker);
+    
+    function keyboardClicker(){
+        if(keyboardRun){
+            clickCounterKeyboard++;
+            if(clickTImerKeyboard){
+                clearTimeout(clickTImer);
+            }
+            clickTImerKeyboard = setTimeout(() => {
+                if(clickCounterKeyboard === 1){
+                    movingKeys();
+                }
+                else if(clickCounterKeyboard === 2){
+                    selectingKey(area);
                 }
                 else if(clickCounterKeyboard >= 3){
                     rowDown();
@@ -269,32 +321,61 @@ function movingKeys(){
     let currentKey = key[keyPosition];
     currentKey.style.borderWidth = '1px';
     keyPosition++;
+    console.log(keyPosition)
     if(keyPosition === 45){
         keyPosition = 0;
     }
 }
 
-function selectingKey(){
+
+
+function selectingKey(area){
     let key = document.querySelectorAll('.char');
     key.forEach(element => {    
          if(element.style.borderWidth === '1px'){
-             if(element.innerHTML === "⌫"){
+
+            if(element.innerHTML === "⌫"){
                  displayArr.pop();
-             }
-             else{
+            }
+
+            else if(element.innerHTML === "↵"){
+                mainClickRun = true;
+                let keyboard = document.getElementById('keyboard');
+                keyboard.style.display = "none";
+                textArea.style.height = "70vh";
+                clickFunction();
+            }
+
+            else if(element.innerHTML === "⇪"){
+                let valueArr = document.getElementsByClassName('char');
+                let value = Array.from(valueArr);
+
+                if(valueArr[0].style.textTransform === 'uppercase'){
+                    value.forEach(element => {
+                        element.style.textTransform = "lowercase";
+                    })
+                }
+
+                else{
+                    value.forEach(element => {
+                        element.style.textTransform = "uppercase";
+                    })
+                }
+            }
+
+            else if(element.innerHTML === "space"){
+                displayArr.push(" ");
+            }
+
+            else{
                 displayArr.push(element.innerHTML);
-             }
-    //         else if(element.innerHTML === "↵"){
-    //             let keyboard = document.getElementById('keyboard');
-    //             keyboard.style.display = "none";
-    //             textArea.style.height = "70vh";
-    //             mainClickRunner = true;
-    //             keyboardrun = false;
-    //             clickCounter = 0;
-    //             clickFunction();
-    //         }
-    //         else if(element.innerHTML === "⇪"){
-    //         }
+            }
+            textArea.innerHTML = "";
+            displayArr.forEach(element => {
+            textArea.innerHTML += element;
+    
+            });
+            console.log(area);
          }
     });
 }
@@ -313,13 +394,10 @@ function rowDown(){
     key.forEach(element => {
         element.style.borderWidth = '0px';
     })
-    if(keyPosition > 45){
+    if(keyPosition >= 44){
         keyPosition = 0;
     }
     let currentKey = key[keyPosition];
     currentKey.style.borderWidth = '1px';
     keyPosition++;
 }
-
-
-

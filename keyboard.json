@@ -4,7 +4,7 @@
         "secondkeys":["q","w","e","r","t","y","u","i","o","p"],
         "thirdkeys":["a","s","d","f","g","h","j","k","l"],
         "fourthkeys":["⇪","z","x","c","v","b","n","m","⌫"],
-        "fifthkeys":["⇨","@",",","space",".",".com","↵"]
+        "fifthkeys":["/","@",",","space",".",".com","↵"]
     }
 }
 

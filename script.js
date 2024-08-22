@@ -9,10 +9,12 @@ let keyboardRun = false;
 let totalKeys = [];
 let keyPosition = 0;
 let displayArr = [];
+let displayArr2 = [];
 let textKeyboard;
 let sendKeyboard;
 let a;
 let b;
+let counter = 0;
 
 
 function fetchdata(){
@@ -176,7 +178,10 @@ function movingMain(){
 
 
 function selectingElement(){
+    keyPosition = 0;
     if(textArea.style.borderWidth === "3px"){
+        a=1;
+        sendArea1.readOnly = true;
         textArea.readOnly = false;
         textArea.focus();
         textArea.style.height = "45vh";
@@ -187,13 +192,16 @@ function selectingElement(){
     }
 
     else if(sendArea.style.borderWidth ==="3px"){
+        b=1;
+        textArea.readOnly = true;
         sendArea1.disabled = false;
+        sendArea1.placeholder = '';
         sendArea1.focus();
         textArea.style.height = "45vh";
         let keyboard = document.getElementById('keyboard');
         keyboard.style.display = "block";
         a = 0;
-        keyboardRunner2(sendArea1);
+        keyboardRunner(sendArea1);
     }
     
     else if(sendButton.style.borderWidth ==="3px"){
@@ -206,10 +214,9 @@ function triple(){
     console.log("multiplce click detected");
 }
 
+
 function keyboardRunner(area){
-    if(a === 0){
-        return;
-    }
+    
     totalKeys = [];
     keyPosition = 0;
     mainClickRun = false;
@@ -230,10 +237,10 @@ function keyboardRunner(area){
     fifthRow.forEach(element => {
         totalKeys.push(element);
     });
-
-
+    resetKeys();
     let clickCounterKeyboard = 0;
-    let clickTImerKeyboard = null; 
+    let clickTImerKeyboard = null;
+    document.querySelector('body').removeEventListener('click',keyboardClicker);
     document.querySelector('body').addEventListener('click',keyboardClicker);
     
     function keyboardClicker(){
@@ -244,13 +251,13 @@ function keyboardRunner(area){
             }
             clickTImerKeyboard = setTimeout(() => {
                 if(clickCounterKeyboard === 1){
-                    movingKeys();
+                    movingKeys(area);
                 }
                 else if(clickCounterKeyboard === 2){
                     selectingKey(area);
                 }
                 else if(clickCounterKeyboard >= 3){
-                    rowDown();
+                    rowDown(area);
                 }
                 clickCounterKeyboard = 0;
             }, 400);
@@ -258,146 +265,165 @@ function keyboardRunner(area){
     }
 }
 
-function keyboardRunner2(area){
-    if(b === 0){
+
+
+function movingKeys(area){
+    if((area.tagName === 'TEXTAREA' && b === 0 )||(area.tagName === 'INPUT' && a === 0)){
+        let key = document.querySelectorAll('.char');
+        key.forEach(element => {
+            element.style.borderWidth = '0px';
+        })
+        if(keyPosition === 45){
+            keyPosition = 0;
+        }
+        let currentKey = key[keyPosition];
+        currentKey.style.borderWidth = '1px';
+        keyPosition++;
+        if(keyPosition === 45){
+            keyPosition = 0;
+        }
+    }
+    if(counter === 1){
         return;
     }
-    totalKeys = [];
-    keyPosition = 0;
-    mainClickRun = false;
-    keyboardRun = true;
-
-    firstRow.forEach(element => {
-        totalKeys.push(element);
-    });
-    secondRow.forEach(element => {
-        totalKeys.push(element);
-    });
-    thirdRow.forEach(element => {
-        totalKeys.push(element);
-    });
-    fourthRow.forEach(element => {
-        totalKeys.push(element);
-    });
-    fifthRow.forEach(element => {
-        totalKeys.push(element);
-    });
-
-
-    let clickCounterKeyboard = 0;
-    let clickTImerKeyboard = null; 
-    document.querySelector('body').addEventListener('click',keyboardClicker);
-    
-    function keyboardClicker(){
-        if(keyboardRun){
-            clickCounterKeyboard++;
-            if(clickTImerKeyboard){
-                clearTimeout(clickTImer);
-            }
-            clickTImerKeyboard = setTimeout(() => {
-                if(clickCounterKeyboard === 1){
-                    movingKeys();
-                }
-                else if(clickCounterKeyboard === 2){
-                    selectingKey(area);
-                }
-                else if(clickCounterKeyboard >= 3){
-                    rowDown();
-                }
-                clickCounterKeyboard = 0;
-            }, 400);
-        }
-    }
 }
-
-function movingKeys(){
-    let key = document.querySelectorAll('.char');
-    key.forEach(element => {
-        element.style.borderWidth = '0px';
-    })
-    if(keyPosition === 45){
-        keyPosition = 0;
-    }
-    let currentKey = key[keyPosition];
-    currentKey.style.borderWidth = '1px';
-    keyPosition++;
-    console.log(keyPosition)
-    if(keyPosition === 45){
-        keyPosition = 0;
-    }
-}
-
 
 
 function selectingKey(area){
     let key = document.querySelectorAll('.char');
-    key.forEach(element => {    
-         if(element.style.borderWidth === '1px'){
+    if(area.tagName === 'TEXTAREA' && b === 0){
+        key.forEach(element => {    
+            if(element.style.borderWidth === '1px'){
+   
+               if(element.innerHTML === "⌫"){
+                    displayArr.pop();
+               }
+   
+               else if(element.innerHTML === "done"){
+                   mainClickRun = true;
+                   let keyboard = document.getElementById('keyboard');
+                   keyboard.style.display = "none";
+                   textArea.style.height = "70vh";
+                   counter = 1;
+                   return;
+               }
+   
+               else if(element.innerHTML === "⇪"){
+                   let valueArr = document.getElementsByClassName('char');
+                   let value = Array.from(valueArr);
+   
+                   if(valueArr[0].style.textTransform === 'uppercase'){
+                       value.forEach(element => {
+                           element.style.textTransform = "lowercase";
+                       });
+                   }
+   
+                   else{
+                       value.forEach(element => {
+                           element.style.textTransform = "uppercase";
+                       })
+                   }
+               }
+   
+               else if(element.innerHTML === "space"){
+                   displayArr.push(" ");
+               }
+   
+               else{
+                   displayArr.push(element.innerHTML);
+               }
+               textArea.innerHTML = "";
+               displayArr.forEach(element => {
+                textArea.innerHTML += element;
+               });
 
+            }
+       });
+    }
+
+    else if(area.tagName === 'INPUT' && a === 0){
+        key.forEach(element => {
+           if(element.style.borderWidth === '1px'){
             if(element.innerHTML === "⌫"){
-                 displayArr.pop();
+                displayArr2.pop();
             }
 
-            else if(element.innerHTML === "↵"){
+            else if(element.innerHTML === "done"){
                 mainClickRun = true;
                 let keyboard = document.getElementById('keyboard');
                 keyboard.style.display = "none";
                 textArea.style.height = "70vh";
-                clickFunction();
+                counter = 1;
+                return;
             }
 
             else if(element.innerHTML === "⇪"){
                 let valueArr = document.getElementsByClassName('char');
                 let value = Array.from(valueArr);
 
-                if(valueArr[0].style.textTransform === 'uppercase'){
+                if (valueArr[0].style.textTransform === 'uppercase') {
                     value.forEach(element => {
-                        element.style.textTransform = "lowercase";
-                    })
+                        element.style.textTransform = 'lowercase';
+                    });
                 }
-
                 else{
                     value.forEach(element => {
-                        element.style.textTransform = "uppercase";
-                    })
+                        element.style.textTransform = 'uppercase';
+                    });
                 }
             }
 
             else if(element.innerHTML === "space"){
-                displayArr.push(" ");
+                displayArr2.push(" ");
             }
-
             else{
-                displayArr.push(element.innerHTML);
+                displayArr2.push(element.innerHTML);
             }
-            textArea.innerHTML = "";
-            displayArr.forEach(element => {
-            textArea.innerHTML += element;
-    
+            sendArea1.value = "";
+            displayArr2.forEach(element => {
+                sendArea1.value += element;
             });
-            console.log(area);
-         }
-    });
+           } 
+        });
+    }   
 }
 
-function rowDown(){
-    if(keyPosition <= 19){
-        keyPosition += 9;
+
+
+function rowDown(area){
+    if((area.tagName === 'TEXTAREA' && b === 0 )||(area.tagName === 'INPUT' && a === 0)){
+        if(keyPosition <= 19){
+            keyPosition += 9;
+        }
+        else if(keyPosition >= 20 && keyPosition <= 29){
+            keyPosition += 8;
+        }
+        else if(keyPosition >= 30){
+            keyPosition += 8;
+        }
+        let key = document.querySelectorAll('.char');
+        key.forEach(element => {
+            element.style.borderWidth = '0px';
+        })
+        if(keyPosition >= 44){
+            keyPosition = 0;
+        }
+        let currentKey = key[keyPosition];
+        currentKey.style.borderWidth = '1px';
+        keyPosition++;
     }
-    else if(keyPosition >= 20 && keyPosition <= 29){
-        keyPosition += 8;
+    if(counter === 1){
+        return;
     }
-    else if(keyPosition >= 30){
-        keyPosition += 8;
-    }
+    
+}
+
+
+
+function resetKeys() {
+    keyPosition = 0;
     let key = document.querySelectorAll('.char');
     key.forEach(element => {
         element.style.borderWidth = '0px';
-    })
-    if(keyPosition >= 44){
-        keyPosition = 0;
-    }
-    let currentKey = key[keyPosition];
-    currentKey.style.borderWidth = '1px';
-    keyPosition++;
+    });
 }
